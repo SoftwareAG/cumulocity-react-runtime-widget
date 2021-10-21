@@ -1,0 +1,17 @@
+{
+  "name": "Cumulocity React Runtime Widget",
+  "contextPath": "cumulocity-react-runtime-widget",
+  "key": "cumulocity-react-runtime-widget-application-key",
+  "contentSecurityPolicy": "default-src 'self'",
+  "icon": {
+    "class": "fa fa-diamond"
+  },
+  "manifest": {
+    "noAppSwitcher": true,
+    "requiredPlatformVersion": "1006.3.0 - 1010.0.8",
+    "version": "1.0.0",
+    "author": "Shilpy Khanna - Software AG, PS India",
+    "description": "It fetches Inventory data based on the device id and display the same in a widget. It also updates the device name by taking an input from the user.",
+    "license": "Apache 2.0"
+  }
+}

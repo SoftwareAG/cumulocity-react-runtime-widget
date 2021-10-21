@@ -1,0 +1,11 @@
+{
+  "name": "cumulocity-react-runtime-widget",
+  "interleave": {
+    "dist\\bundle-src\\custom-widget.js": "cumulocity-react-runtime-widget-CustomWidget",
+    "dist/bundle-src/custom-widget.js": "cumulocity-react-runtime-widget-CustomWidget"
+  },
+  "version": "1.0.0",
+  "description": "It fetches Inventory data based on the device id and display the same in a widget. It also updates the device name by taking an input from the user.",
+  "author": "Shilpy Khanna - Software AG, PS India",
+  "license": "Apache 2.0"
+}
