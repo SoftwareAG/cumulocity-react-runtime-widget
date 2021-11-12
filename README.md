@@ -1,12 +1,16 @@
+
 ## React Widget for cumulocity project
 
  This Demo Widget created using Angular Library and later deploy it in App Builder as cumulocity widget.
   It fetches Inventory data based on the device id and displays the same in a widget.
   It also updates the device name by taking an input from the user.
+## Prerequisites:
+
+Angular CLI version 8. (for example: npm i @angular/cli@8.3.25 in your workspace or execute npm i -g @angular/cli@8.3.25 for global installation)
 
 ### Create Angular Library project
 
-Execute below commands to setup New Angular Library Project for widget developement.
+Execute below commands to setup New Angular Library Project for widget development.
 
 1.  Create new Angular Project with the name of your choice.
     
@@ -24,19 +28,19 @@ Execute below commands to setup New Angular Library Project for widget developem
 3.  Install Cumulocity Libraries(Mandatory for widget development)
     
      npm install @c8y/client@1006.3.0
-     npm install @c8y/ngx-components@1006.3.0
+     npm install @c8y/ngx-components@1006.3.0 
     
 4.  Add below script command in Project-Name/package.json file in script section to create shortcut for build and serve(Optional).
     
-    "buildPatch": "cd projects/Library-Name && npm version patch && ng build Library-Name && cd ../../dist/Library-Name && npm pack && move *.tgz ../",
+"buildPatch": "cd projects/library-name && npm version patch && ng build library-name && cd  ../../dist/library-name && npm pack && move *.tgz ../",
+
+"buildMinor": "cd projects/library-name && npm version minor && ng build library-name && cd  ../../dist/library-name && npm pack && move *.tgz ../",
+
+"buildMajor": "cd projects/library-name && npm version major && ng build library-name && cd ../../dist/library-name && npm pack && move *.tgz ../",
+
+"serve": "ng build library-name && npm i dist/library-name && ng s"
     
-    "buildMinor": "cd projects/Library-Name && npm version minor && ng build Library-Name && cd ../../dist/Library-Name && npm pack && move *.tgz ../",
-    
-    "buildMajor": "cd projects/Library-Name && npm version major && ng build Library-Name && cd ../../dist/Library-Name && npm pack && move *.tgz ../",
-    
-    "serve": "ng build Library-Name && npm i dist/Library-Name && ng s"
-    
-    Note: Please replace "Library-Name" with your library name(e.g. react-demo-widget)
+   Note: Please replace "library-Name" with your library name(e.g. react-demo-widget)
 
 
 ## Configure Proxy for Cumulocity API calls
@@ -45,7 +49,7 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
 
 1.  Create new file "proxy-conf.json" in Project-Name/src location
     
-2.  Copy below json in proxy-conf.json file and modify target based on your cumulocity server:
+2.  Copy the below json in proxy-conf.json file and modify target based on your cumulocity server:
     
     ```
      {
@@ -66,7 +70,7 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
        "builder": "@angular-devkit/build-angular:dev-server",
        "options": {
          "browserTarget": "DemoApplication:build",
-         "proxyConfig": "src/proxy.conf.json"
+         "proxyConfig": "src/proxy-conf.json"
        },
        "configurations": {
          "production": {
@@ -82,9 +86,9 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
     ```
       import { Client, BasicAuth } from '@c8y/client';
       const auth = new BasicAuth({
-      user: 'demo@democenter.com',
+      user: 'userName',
       password: '#####',
-      tenant: 't00001'
+      tenant: 'tenant id'
       });
       const client = new Client(auth, 'http://localhost:4200');
       client.setAuth(auth);
@@ -100,7 +104,8 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
     provide: InventoryService,
     useFactory: () => {
         return new InventoryService(fetchClient);
-        }
+        }v
+        ,{ provide:  FetchClient, useValue:  client.core }
     }]
     
     ```
@@ -110,120 +115,193 @@ Note: We need to initialize provider for each service and also import necessary 
 
 ## Widget Development
 
--   Design and develop your widget in Project-Name/projects/Library-Name/src/lib folder
+For widget development using ReactJs, follow the below link.
+https://github.com/SoftwareAG/cumulocity-sample-react-library
+
+1. Follow the step 2 or 3 to create a library and use it in your project.
+
+Follow the steps to create react library widget (give the link here and generate .tgz file)
+
+2. Create a folder with the name "binary"  and place the copied .tgz file under this folder.
+3. Run the below command to add the widget library you just created to this project.
+```
+npm i ./binary/react-library-file-name.
+Example:  npm i ./binary/sample-react-library1.1.0.6.tgz
+```
+   Add your react library widget in Project-Name/projects/Library-Name/src/lib folder
+
+4. If you have published the react widget library on npm then you can install it using
+npm react-library-name. 
+```
+npm i react-library-name
+npm i sample-react-library1@1.0.6
+```
+5. Replace the code in library-name.component.ts file with the below piece of code
+
+```
+import { AfterViewInit, Component, Input, OnChanges} from  '@angular/core';
+import { FetchClient } from  '@c8y/client';
+import  *  as  React  from  'react';
+import  *  as  ReactDOM  from  'react-dom';
+import { FetchDeviceDetails } from  'sample-react-library1/lib';
+
+@Component({
+selector:  'cumulocity-react-demo-widget',
+template:  '<div [id]="rootId"></div>',
+styleUrls: ['./react-demo-widget.component.css']
+})
+
+export  class  ReactDemoWidgetComponent  implements  OnChanges, AfterViewInit {
+@Input() config;
+public  rootId = 'fetch-device-details';
+private  hasViewLoaded = false;
+  
+constructor(public  fetchClient: FetchClient) {}
+
+public  ngOnChanges() {
+this.renderComponent();
+}
+
+public  ngAfterViewInit() {
+this.hasViewLoaded = true;
+this.renderComponent();
+}
+
+private  renderComponent() {
+if (!this.hasViewLoaded) {
+return;
+} 
+
+ReactDOM.render(
+React.createElement(FetchDeviceDetails,{'fetchClient':  this.fetchClient  as  any, 'id':'deviceId'}),
+document.getElementById(this.rootId)
+);
+}
+}
+```
+
+Install the below dependencies:
+```
+npm install react
+npm install react-dom
+```
+    Create a library-name.config.ts,html,css file and add the below piece of code in it.
+```
+ import {Component, Input} from  '@angular/core';
+
+@Component({
+selector:  'lib-config-demo-widget',
+templateUrl:  './react-demo-widget.config.html',
+styleUrls: ['./react-demo-widget.config.css']
+})
+
+export  class  ReactDemoWidgetConfig {
+@Input() config: any = {};
+}
+```
+6. Add the imports for HOOK_COMPONENTS
+
+7. Add your widget hook in library module at Project-Name/projects/Library-Name/src/lib/your-module.ts. See below example:
     
--   Please note that Angular CLI may generate .spec.ts file automatically for Unit Testing purpose.
+ 
+ ``` @NgModule({
+declarations: [ReactDemoWidgetComponent,ReactDemoWidgetConfig],
+imports: [
+],
+entryComponents: [ReactDemoWidgetComponent, ReactDemoWidgetConfig],
+providers: [
+{
+provide:  HOOK_COMPONENTS,
+multi:  true,
+useValue: {
+id:  'react-demo-widget',
+label:  'Cumulocity React Demo Widget',
+description:  'This is my first cumulocity react demo widget',
+component:  ReactDemoWidgetComponent,
+configComponent:  ReactDemoWidgetConfig,
+data : {
+ng1 : {
+options: { noDeviceTarget:  false,
+noNewWidgets:  false,
+deviceTargetNotRequired:  false,
+groupsSelectable:  true
+},
+}
+}
+}
+}],
+exports: [ReactDemoWidgetComponent, ReactDemoWidgetConfig]
+```
     
--   Add your widget hook in library module at Project-Name/projects/Library-Name/src/lib/your-module.ts. See below example:
+8. Add your component selector in src/app.component.html for example:
     
     ```
-    providers: [
-    {
-        provide:  HOOK_COMPONENTS,
-        multi: true,
-        useValue: {
-            id: 'demo.widget',
-            label: 'Demo Widget',
-            description: 'Demo Widget',
-            previewImage: preview.previewImage,
-            component: GpDemoWidgetComponent,
-            configComponent: GpDemoWidgetConfig,
-            data : {
-                ng1 : {
-                    options: { noDeviceTarget: false,
-                    noNewWidgets: false,
-                    deviceTargetNotRequired: false,
-                    groupsSelectable: true
-                    },
-                }
-            }
-        }
-    }]
+    <cumulocity-react-demo-widget></cumulocity-react-demo-widget>
     
     ```
     
--   For more details about widget developement, please refer  [Cumulocity Guide](https://cumulocity.com/guides/web/how-to/#add-a-custom-widget)
-    
--   Add your component selector in src/app.component.html for example:
-    
-    ```
-    <lib-gp-demo-widget></lib-gp-demo-widget>
-    
-    ```
-    
--   import your widget module in /src/app.module.ts for local development and testing. for example:
+9. Import your widget module(example: ReactDemoWidgetModule) in /src/app.module.ts for local development and testing. for example:
     
     ```
     import { Your-Library-Module } from './../../projects/Library-Name/src/lib/Library-Module-file-Name.ts';
     
     ```
-    
 
-## [](https://github.com/SoftwareAG/cumulocity-demo-widget#local-development-server)Local development server
+## Local development server  
 
-Run  `npm run serve`  for a dev server. Navigate to  `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run  `npm run serve`  for a dev server. Navigate to  `http://localhost:4200/`. 
 
-## [](https://github.com/SoftwareAG/cumulocity-demo-widget#installation)Installation
+## Installation
 
 1.  Create a Minorbuild binary file from the source code.
     
     Follow the below-specified command to create a Minorbuild binary file
     
-    i) run npm i command to install all library files specified in source code
+    i) Run npm i command to install all library files specified in source code
     
     `npm i`
     
-    ii) run npm run buildMinor command to create a binary file under dist folder
+    ii) Run npm run buildMinor command to create a binary file under dist folder
     
     `npm run buildMinor`
     
-    iii) Copy the binary file  **gp-demo-widget-0.x.x.tgz**  the latest one from the dist folder and Place the binary file under any folder.
-    
-2.  This could be used in conjunction with the application builder/cockpit.
+    iii) Copy the binary file  **react-demo-widget-0.x.x.tgz**  the latest one from the dist folder and Place the binary file under any folder.
 
 
 ## Deployment Of Demo widget In App Builder
 
-##### [](https://github.com/SoftwareAG/cumulocity-demo-widget#1-install-the-binary-file-in-app-builder)1. Install the binary file in App Builder
+1. Install the binary file in App Builder
 
 To Install the binary file in App Builder, run the following command.
 
 `npm i <binary file path>`
 
-Example:
-
-npm i <binary file path>\gp-demo-widget-1.0.0.tgz
+Example: npm i <binary file path>\react-demo-widget-1.0.0.tgz
 
 After installation see that your App Builder has following entry in  `package.json` .
 
-"gp-demo-widget": "file:../commonLibrary/gp-demo-widget-0.11.0.tgz",
+"cumulocity-react-runtime-widget": "file:../../minor-build-widgetv3/cumulocity-react-runtime-widget-0.4.0.tgz",
+ 
+ 2. Import Demo Widget Module
 
-##### [](https://github.com/SoftwareAG/cumulocity-demo-widget#2-import-demo-widget-module-1)2. Import Demo Widget Module
-
-Import GpDemoWidgetModule in cumulocity-app-builder\custom-widgets\custom-widgets.module.ts and also place the imported Module under  `@NgModule`.
+Import ReactDemoWidgetModule in cumulocity-app-builder\custom-widgets\custom-widgets.module.ts and also place the imported Module under  `@NgModule`.
 
 ```
-import { GpDemoWidgetModule } from 'gp-demo-widget';
+import { ReactDemoWidgetModule } from 'cumulocity-react-runtime-widget';
 
 @NgModule({
-
   imports: [
-
-    GpDemoWidgetModule
-
+    ReactDemoWidgetModule
       ]
-
   })
 
 ```
+3. Development server
 
-##### [](https://github.com/SoftwareAG/cumulocity-demo-widget#3-development-server-1)3. Development server
-
-1.  Using  `package.json Scripts`
-
-run  `npm i`
-
-Update package.json start script
+ - Using  `package.json Scripts`
+		run  `npm i`
+		
+ - Update package.json start script
 
 ```
 "scripts": {
@@ -236,41 +314,37 @@ Update package.json start script
 
 Run  `npm run start` for a dev server. Navigate to  `http://localhost:9000/apps/app-builder/`. The app will automatically reload if you change any of the source files.
 
-##### [](https://github.com/SoftwareAG/cumulocity-demo-widget#4-build-1)4. Build
+ - Build
 
-1.  Using  `package.json Scripts`
+Using  `package.json Scripts`
 
 Update package.json start script
 
 ```
 "scripts": {
-
   "build": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js",
-
   },
 
 ```
 
 Run  `npm run build`
 
-##### [](https://github.com/SoftwareAG/cumulocity-demo-widget#5-deploy-widget-to-the-app-builder)5. Deploy widget to the App Builder
+ -  Deploy widget to the App Builder
 
-1.  Using  `package.json Scripts`
+ Using  `package.json Scripts`
 
 Update package.json start script
 
 ```
 "scripts": {
-
   "deploy": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js -u <http://cumulocity_tenant>",
-
   },
 
 ```
 
-## [](https://github.com/SoftwareAG/cumulocity-demo-widget#want-to-create-runtime-loading-widget-optional)Want to create runtime loading widget? (Optional)
+## Want to create runtime loading widget? (Optional)
 
-#### [](https://github.com/SoftwareAG/cumulocity-demo-widget#follow-the-below-steps-to-convert-library-widget-into-runtime)Follow the below steps to convert library widget into runtime
+#### Follow the below steps to convert library widget into runtime
 
 1.  Add below script command in the script section of package.json( the one in the root folder) to create shortcut for runtime.
 
@@ -284,14 +358,15 @@ npm i gulp-inject-string@1.1.2 ng-packagr@9.1.1 css-loader@3.5.3 del@5.1.0 delay
 ```
 
 3.  Copy the runtime folder from this project into your angular project.
-4.  Edit the name and interleave values in the runtime/package.json to include the new contextPath: Important: Leave the -CustomWidget on the interleave option, and don't edit the dist/bundle-src/custom-widget.js part
+4.  Edit the name and interleave values in the runtime/package.json to include the new contextPath.
+ Important: Leave the -CustomWidget on the interleave option, and don't edit the dist/bundle-src/custom-widget.js part
 
 ```
 {
   "name": "demo-runtime-widget",
   "interleave": {
-    "dist\\bundle-src\\custom-widget.js": "demo-runtime-widget-CustomWidget",
-    "dist/bundle-src/custom-widget.js": "demo-runtime-widget-CustomWidget"
+    "dist\\bundle-src\\custom-widget.js": "react-demo-runtime-widget-CustomWidget",
+    "dist/bundle-src/custom-widget.js": "react-demo-runtime-widget-CustomWidget"
   },
 }
 
@@ -301,18 +376,18 @@ npm i gulp-inject-string@1.1.2 ng-packagr@9.1.1 css-loader@3.5.3 del@5.1.0 delay
 
 ```
 {
-  "name": "Demo Runtime Widget",
-  "contextPath": "demo-runtime-widget",
-  "key": "demo-runtime-widget-application-key",
-  "contentSecurityPolicy": "default-src 'self'",
-  "icon": {
-    "class": "fa fa-delicious"
-  },
-  "manifest": {
-    "noAppSwitcher": true
-  }
-}
 
+"name": "First Runtime Widget",
+"contextPath": "first-runtime-widget",
+"key": "first-runtime-widget-application-key",
+"contentSecurityPolicy": "default-src 'self'",
+"icon": {
+"class": "fa fa-delicious"
+},
+"manifest": {
+"noAppSwitcher": true
+}
+}
 ```
 
 6.  Edit the entry file in the runtime/ng-package.json file. Update the entry file path, so that it points to public-api.ts of your library project.
@@ -320,21 +395,20 @@ npm i gulp-inject-string@1.1.2 ng-packagr@9.1.1 css-loader@3.5.3 del@5.1.0 delay
 ```
 
 {
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "assets": [
-    "styles/**/*"
-  ],
-  "lib": {
-    "entryFile": "../projects/gp-demo-widget/src/public-api.ts",
-    "umdModuleIds": {
-      "@c8y/ngx-components": "@c8y/ngx-components"
-    },
-    "flatModuleFile": "custom-widget"
-  },
-  "whitelistedNonPeerDependencies": ["."],
-  "dest": "dist/widget-library"
+"$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+"assets": [
+"styles/**/*"
+],
+"lib": {
+"entryFile": "../projects/react-demo-widget/src/public-api.ts",
+"umdModuleIds": {
+"@c8y/ngx-components": "@c8y/ngx-components"
+},
+"flatModuleFile": "custom-widget"
+},
+"whitelistedNonPeerDependencies": ["."],
+"dest": "dist/widget-library"
 }
-
 
 ```
 
@@ -342,41 +416,25 @@ npm i gulp-inject-string@1.1.2 ng-packagr@9.1.1 css-loader@3.5.3 del@5.1.0 delay
     
 8.  Build the widget
     
-
   npm run runtime
 
 9.  After the build completes the /dist folder will contain a zip file, this is your deployable widget
-    
-10.  Follow runtime deployment instruction from  [here](https://github.com/SoftwareAG/cumulocity-runtime-widget-loader). Download the Demo Runtime Widget  [from here](https://github.com/SoftwareAG/cumulocity-demo-widget/releases/download/1.2.0/demo-runtime-widget-1.2.0.zip)
     
 
 On the successful deployment of the widget, login to cumulocity tenant URL and basic login credentials
 
 1.  Open the Application Builder from the app switcher (Next to your username in the top right)
-    
 2.  Click Add application
-    
 3.  Enter the application details and click Save
-    
-4.  Select Add dashboard
-    
-5.  Click Blank Dashboard
-    
+4.  Select Add dashboard 
+5.  Click Blank Dashboard  
 6.  Enter the dashboard details and click Save
-    
 7.  Select the dashboard from the navigation
-    
 8.  Check for your widget and test it out.
     
 
-## [](https://github.com/SoftwareAG/cumulocity-demo-widget#user-guide)User Guide
+## User Guide
 
 Click on Add Widget and select Demo Widget as a widget. In the configuration, you only need to select the device.
-
-----------
-
-This widget is provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
-
-----------
   
 
