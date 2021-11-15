@@ -14,8 +14,10 @@ Execute below commands to setup New Angular Library Project for widget developme
 
 1.  Create new Angular Project with the name of your choice.
     
-    ```ng new Project-Name
+    ```
+    ng new Project-Name
     Example: cumulocity-react-demo-widget
+    
     ```
     
 2.  Create Library project for our widget.
