@@ -1,4 +1,5 @@
 
+
 ## React Widget for cumulocity project
 
  This Demo Widget created using Angular Library and later deploy it in App Builder as cumulocity widget.
@@ -30,6 +31,7 @@ Execute below commands to setup New Angular Library Project for widget developme
 3.  Install Cumulocity Libraries(Mandatory for widget development)
     
      npm install @c8y/client@1006.3.0
+     
      npm install @c8y/ngx-components@1006.3.0 
     
 4.  Add below script command in Project-Name/package.json file in script section to create shortcut for build and serve(Optional).
@@ -99,18 +101,16 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
     ```
     
 5.  Intialize provider for your cumulocity api in Project-Name/src/app.module.ts file.
-    
     ```
     providers: [
-    {
-    provide: InventoryService,
-    useFactory: () => {
-        return new InventoryService(fetchClient);
-        }v
-        ,{ provide:  FetchClient, useValue:  client.core }
-    }]
-    
-    ```
+	{
+	provide:  InventoryService,
+	useFactory: () => {
+	return  new  InventoryService(fetchClient);
+	}
+	},
+	{ provide:  FetchClient, useValue:  client.core }],
+	```
     
 
 Note: We need to initialize provider for each service and also import necessary providers for example: import { InventoryService} from '@c8y/client';
@@ -120,32 +120,28 @@ Note: We need to initialize provider for each service and also import necessary 
 For widget development using ReactJs, follow the below link.
 https://github.com/SoftwareAG/cumulocity-sample-react-library
 
-1. Follow the step 2 or 3 to create a library and use it in your project.
-
-Follow the steps to create react library widget (give the link here and generate .tgz file)
-
-2. Create a folder with the name "binary"  and place the copied .tgz file under this folder.
-3. Run the below command to add the widget library you just created to this project.
+1. Create a folder with the name "binary"  and place the copied .tgz file under this folder.
+2. Run the below command to add the widget library you just created to this project.
 ```
 npm i ./binary/react-library-file-name.
 Example:  npm i ./binary/sample-react-library1.1.0.6.tgz
 ```
    Add your react library widget in Project-Name/projects/Library-Name/src/lib folder
 
-4. If you have published the react widget library on npm then you can install it using
+3. If you have published the react widget library on npm then you can install it using
 npm react-library-name. 
 ```
 npm i react-library-name
 npm i sample-react-library1@1.0.6
 ```
-5. Replace the code in library-name.component.ts file with the below piece of code
+4. Replace the code in Project-Name/projects/library-name/src/lib/library-name.component.ts file with the below piece of code
 
 ```
 import { AfterViewInit, Component, Input, OnChanges} from  '@angular/core';
 import { FetchClient } from  '@c8y/client';
 import  *  as  React  from  'react';
 import  *  as  ReactDOM  from  'react-dom';
-import { FetchDeviceDetails } from  'sample-react-library1/lib';
+
 
 @Component({
 selector:  'cumulocity-react-demo-widget',
@@ -187,7 +183,9 @@ Install the below dependencies:
 npm install react
 npm install react-dom
 ```
-    Create a library-name.config.ts,html,css file and add the below piece of code in it.
+
+   Create a library-name.config.ts,html,css file in Project-Name/projects/library-name/src/lib path and add the below piece of code in it.
+    
 ```
  import {Component, Input} from  '@angular/core';
 
@@ -201,12 +199,11 @@ export  class  ReactDemoWidgetConfig {
 @Input() config: any = {};
 }
 ```
-6. Add the imports for HOOK_COMPONENTS
-
-7. Add your widget hook in library module at Project-Name/projects/Library-Name/src/lib/your-module.ts. See below example:
+5. Add your widget hook in library module at Project-Name/projects/Library-Name/src/lib/your-module.ts and add necessary imports. See below example:
     
  
- ``` @NgModule({
+ ``` 
+ @NgModule({
 declarations: [ReactDemoWidgetComponent,ReactDemoWidgetConfig],
 imports: [
 ],
@@ -233,16 +230,17 @@ groupsSelectable:  true
 }
 }],
 exports: [ReactDemoWidgetComponent, ReactDemoWidgetConfig]
+})
 ```
     
-8. Add your component selector in src/app.component.html for example:
+6. Add your component selector in src/app/app.component.html for example:
     
     ```
     <cumulocity-react-demo-widget></cumulocity-react-demo-widget>
     
     ```
     
-9. Import your widget module(example: ReactDemoWidgetModule) in /src/app.module.ts for local development and testing. for example:
+7. Import your widget module(example: ReactDemoWidgetModule) in /src/app.module.ts for local development and testing. for example:
     
     ```
     import { Your-Library-Module } from './../../projects/Library-Name/src/lib/Library-Module-file-Name.ts';
@@ -251,7 +249,13 @@ exports: [ReactDemoWidgetComponent, ReactDemoWidgetConfig]
 
 ## Local development server  
 
-Run  `npm run serve`  for a dev server. Navigate to  `http://localhost:4200/`. 
+Run  `npm run start`  for a dev server. Navigate to  `http://localhost:4200/`. 
+
+Install the below dependencies if you get the erros related to them.
+```
+npm i @angular/cdk@8.2.3
+npm i @angular/upgrade@8.2.13
+```
 
 ## Installation
 
@@ -298,7 +302,9 @@ import { ReactDemoWidgetModule } from 'cumulocity-react-runtime-widget';
   })
 
 ```
-3. Development server
+3. Create a folder 'reactLibrary' and place the .tgz file of the react library you developed.
+4. Install the react library in app builder.
+5. Development server
 
  - Using  `package.json Scripts`
 		run  `npm i`
