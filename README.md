@@ -117,8 +117,8 @@ Here are steps to setup proxy for Cumulocity API. This will help to develop and 
 
 ### Widget Development
 
-For widget development using ReactJs, follow the below link.
-https://github.com/SoftwareAG/cumulocity-sample-react-library
+For widget development using ReactJs, follow the link [here](https://github.com/SoftwareAG/cumulocity-sample-react-library/README.md/#Instructions-to-extend-or-modify-the-react-widget-library-and-use-it-in-your-react-app).
+
 
 1. Create a folder with the name "binary"  and place the copied .tgz file under this folder.
 2. Run the below command to add the widget library you just created to this project.
