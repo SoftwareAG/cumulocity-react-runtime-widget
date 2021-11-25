@@ -1,6 +1,6 @@
 {
     "/": {
-    "target": "https://env668860.us.cumulocity.com",
+    "target": "tenantUrl",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"

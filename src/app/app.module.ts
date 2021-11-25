@@ -6,9 +6,9 @@ import { BasicAuth, Client, FetchClient, InventoryService } from '@c8y/client';
 import { ReactDemoWidgetModule } from 'projects/react-demo-widget/src/lib/react-demo-widget.module';
 import { CommonModule } from '@angular/common';
 const auth = new BasicAuth({
-  user: 'shilpy.khanna@softwareag.com',
-  password: 'Cumulocity@1234#',
-  tenant: 'env668860'
+  user: 'userName',
+  password: 'password',
+  tenant: 'tenantId'
   });
 
   const client = new Client(auth, 'http://localhost:4200');

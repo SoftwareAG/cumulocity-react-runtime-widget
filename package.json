@@ -31,11 +31,11 @@
     "@c8y/ngx-components": "^1006.3.0",
     "@c8y/style": "^1006.6.8",
     "react": "^17.0.2",
-    "react-demo-widget": "file:dist/react-demo-widget",
     "react-dom": "^17.0.2",
+    "react-library": "file:binary/react-library-1.0.0.tgz",
     "react-query": "^3.19.6",
     "rxjs": "~6.4.0",
-    "sample-react-library1": "^1.0.6",
+    "styled-components": "^5.3.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
