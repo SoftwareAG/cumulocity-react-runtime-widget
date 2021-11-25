@@ -1,6 +1,7 @@
 
 
 
+
 ## React Widget for cumulocity project
 
  This Demo Widget created using Angular Library and later deploy it in App Builder as cumulocity widget.
@@ -278,34 +279,34 @@ Install the below dependencies if you get the erros related to them.
 
 ### Deployment Of Demo widget In App Builder
 
-1. Install the binary file in App Builder
+1. Install the binary file in App Builder.
 
-To Install the binary file in App Builder, run the following command.
+		npm install  <binary file path>`
+		Example: npm i  ./binary file path>\react-demo-widget-1.0.0.tgz
 
-`npm i <binary file path>`
-
-Example: npm i <binary file path>\react-demo-widget-1.0.0.tgz
-
-After installation see that your App Builder has following entry in  `package.json` .
-
-"cumulocity-react-runtime-widget": "file:../../minor-build-widgetv3/cumulocity-react-runtime-widget-0.4.0.tgz",
+ 2. After installation see that your App Builder has following entry in  `package.json` .
+	```
+	"react-demo-widget": "file:../../minor-build-widgetv3/react-demo-widget-1.0.0.tgz"
+	```
  
- 2. Import Demo Widget Module
+ 3. Import ReactDemoWidgetModule in cumulocity-app-builder\custom-widgets\custom-widgets.module.ts and also place the imported Module under  `@NgModule`.
 
-Import ReactDemoWidgetModule in cumulocity-app-builder\custom-widgets\custom-widgets.module.ts and also place the imported Module under  `@NgModule`.
 
-```
-import { ReactDemoWidgetModule } from 'cumulocity-react-runtime-widget';
+		import { ReactDemoWidgetModule } from 'cumulocity-react-runtime-widget';
 
-@NgModule({
-  imports: [
-    ReactDemoWidgetModule
-      ]
-  })
-```
-3. Create a folder 'reactLibrary' and place the .tgz file of the react library you developed.
-4. Install the react library in app builder.
-5. Development server
+		@NgModule({
+		  imports: [
+		    ReactDemoWidgetModule
+		      ]
+		  })
+
+2. Create a folder 'reactLibrary' and place the .tgz file of the react library you developed.
+3. Install the react library in app builder.
+	```
+	npm i  react-library-folder-path/react-library-name.tgz
+	Example npm i ./react-library/react-library-1.0.1.tgz
+	```
+4. Development server
 
  - Using  `package.json Scripts`
 		run  `npm i`
@@ -321,35 +322,28 @@ import { ReactDemoWidgetModule } from 'cumulocity-react-runtime-widget';
 
 	```
 
-Run  `npm run start` for a dev server. Navigate to  `http://localhost:9000/apps/app-builder/`. The app will automatically reload if you change any of the source files.
+- Run  `npm run start` for a dev server. Navigate to  `http://localhost:9000/apps/app-builder/`. The app will automatically reload if you change any of the source files.
 
- - Build
+ - Update package.json build script 
 
-Using  `package.json Scripts`
+	```
+	"scripts": {
+	  "build": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js",
+	  },
 
-Update package.json start script
+	```
 
-```
-"scripts": {
-  "build": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js",
-  },
+- Run  `npm run build`
 
-```
+ -  Update package.json deploy script. 
 
-Run  `npm run build`
+	```
+	"scripts": {
+	  "deploy": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js -u <http://cumulocity_tenant>",
+	  },
 
- -  Deploy widget to the App Builder
-
- Using  `package.json Scripts`
-
-Update package.json start script
-
-```
-"scripts": {
-  "deploy": "c8ycli build --env.extraWebpackConfig=./extra-webpack.config.js -u <http://cumulocity_tenant>",
-  },
-
-```
+	```
+- Run `npm run deploy`
 
 ## Want to create runtime loading widget? (Optional)
 
@@ -368,7 +362,7 @@ Update package.json start script
 
 3.  Copy the runtime folder from this project into your angular project.
 4.  Edit the name and interleave values in the runtime/package.json to include the new contextPath.
- Important: Leave the -CustomWidget on the interleave option, and don't edit the dist/bundle-src/custom-widget.js part
+ **Important:** Leave the -CustomWidget on the interleave option, and don't edit the dist/bundle-src/custom-widget.js part
 
 	```
 	{
@@ -424,13 +418,14 @@ Update package.json start script
 7.  Add the custom css in runtime/styles/index.css file in runtime folder.
     
 8.  Build the widget
-    
-  npm run runtime
+	```   
+	npm run runtime
+	```
 
 9.  After the build completes the /dist folder will contain a zip file, this is your deployable widget
     
 
-On the successful deployment of the widget, login to cumulocity tenant URL and basic login credentials
+#### On the successful deployment of the widget, login to cumulocity tenant URL and basic login credentials
 
 1.  Open the Application Builder from the app switcher (Next to your username in the top right)
 2.  Click Add application
@@ -444,6 +439,12 @@ On the successful deployment of the widget, login to cumulocity tenant URL and b
 
 ### User Guide
 
-Click on Add Widget and select Demo Widget as a widget. In the configuration, you only need to select the device.
+Click on Add Widget and select your widget name as a widget. In the configuration, you only need to select the device.
+
+
+---
+This library is provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+
+---
   
 
