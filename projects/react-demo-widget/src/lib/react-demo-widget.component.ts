@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, OnChanges} from '@angular/core';
 import { FetchClient } from '@c8y/client';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { FetchDeviceDetails } from 'react-library';
+import { FetchDeviceDetails } from 'sample-react-library';
 
 @Component({
   selector: 'cumulocity-react-demo-widget',
