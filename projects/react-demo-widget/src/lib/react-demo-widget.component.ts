@@ -37,7 +37,7 @@ export class ReactDemoWidgetComponent implements OnChanges, AfterViewInit {
       // npm i react-dom@17.0.2  
 
       ReactDOM.render(
-        React.createElement(FetchDeviceDetails,{'fetchClient': this.fetchClient as any, 'id':'2170'}),
+        React.createElement(FetchDeviceDetails,{'fetchClient': this.fetchClient as any, 'id':this.config.device.id}),
         document.getElementById(this.rootId)
       );
     }
