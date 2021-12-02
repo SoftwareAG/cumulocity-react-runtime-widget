@@ -2,7 +2,7 @@
 
 
 
-## React Widget for cumulocity project
+## React Widget for cumulocity project[<img width="35" src="https://user-images.githubusercontent.com/67993842/97668428-f360cc80-1aa7-11eb-8801-da578bda4334.png"/>](https://github.com/SoftwareAG/cumulocity-react-runtime-widget/releases/download/1.0.0/sample-react-library-1.0.0.tgz)
 
  This Demo Widget created using Angular Library and later deploy it in App Builder as cumulocity widget.
   It fetches Inventory data based on the device id and displays the same in a widget.
